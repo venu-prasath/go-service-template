@@ -10,14 +10,16 @@ import (
 )
 
 type Handler struct {
-	userService *service.UserService
-	jwtSecret   string
+	userService  *service.UserService
+	jwtSecret    string
+	serviceToken string
 }
 
-func New(userService *service.UserService, jwtSecret string) *Handler {
+func New(userService *service.UserService, jwtSecret, serviceToken string) *Handler {
 	return &Handler{
-		userService: userService,
-		jwtSecret:   jwtSecret,
+		userService:  userService,
+		jwtSecret:    jwtSecret,
+		serviceToken: serviceToken,
 	}
 }
 
@@ -39,6 +41,14 @@ func (h *Handler) SetupRoutes() *gin.Engine {
 		{
 			protected.GET("/users/me", h.GetCurrentUser)
 			protected.GET("/users/:id", h.GetUser)
+		}
+
+		if h.serviceToken != "" {
+			svcProtected := api.Group("")
+			svcProtected.Use(middleware.ServiceTokenAuth(h.serviceToken))
+			{
+				svcProtected.GET("/service/users/:id", h.GetUser)
+			}
 		}
 	}
 
