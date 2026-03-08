@@ -1,0 +1,27 @@
+# Binaries
+bin/
+server
+*.exe
+
+# Environment
+.env
+
+# Coverage
+coverage.out
+coverage.html
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+vendor/
+
+# Temporary
+tmp/
